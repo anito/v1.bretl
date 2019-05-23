@@ -4,7 +4,7 @@ require_once( __DIR__ . '/includes/duplicate_content.php');
 require_once( __DIR__ . '/includes/sender_email.php');
 
 add_shortcode('my_sales', 'shortcode_handler_my_sales');
-add_action('init', 'fix_sales_handler_from_post', 998);
+//add_action('init', 'fix_sales_handler_from_post', 998);
 
 function ret_false() {
     return false;
