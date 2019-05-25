@@ -1954,6 +1954,11 @@ div.textwidget p {
 #main-wrapper {
     padding-bottom: 50px;
     position: relative;
+    z-index: 0;
+}
+header#hmain {
+    position: relative;
+    z-index: 999;
 }
 #tab-description table {
     border-collapse: collapse;
