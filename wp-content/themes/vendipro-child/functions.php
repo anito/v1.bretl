@@ -301,7 +301,7 @@ function add_scripts() {
 	wp_enqueue_style( 'child-style-animations', get_stylesheet_directory_uri() . '/css/animations.css' );
 	wp_enqueue_style( 'child-style-payments', get_stylesheet_directory_uri() . '/css/payments.css' );
     wp_enqueue_style('linear-icons', get_stylesheet_directory_uri() . '/css/linearicons.css');
-    wp_enqueue_style('custom-gsap', get_stylesheet_directory_uri() . '/css/gsap/style.css');
+//    wp_enqueue_style('custom-gsap', get_stylesheet_directory_uri() . '/css/gsap/style.css');
     
     wp_register_script('spin.jquery', get_stylesheet_directory_uri() . '/js/spinjs/spin-jquery' . (!IS_DEV_MODE ? '.min' : '') . '.js', false, '0.1', true);
     wp_enqueue_script('spin.jquery');
