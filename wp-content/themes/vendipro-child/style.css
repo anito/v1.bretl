@@ -2992,6 +2992,7 @@ div.MagicToolboxContainer.minWidth {
     position: absolute;
     top: 20px;
     right: 20px;
+    width: 70px;
 }
 .pwb-single-product-brands img {
     background: #ffffff;
