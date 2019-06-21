@@ -390,10 +390,6 @@ function add_scripts() {
     wp_enqueue_style('my-bootstrap', get_stylesheet_directory_uri() . '/css/bootstrap/index.css');
 }
 
-// we need SpineApp to be loaded after wpadminbar has been rendered (to access it)
-// which seems only be possible using wp_footer hook
-//add_action('wp_footer', 'add_spine_app', 1001); // hosted in includes folder
-
 /*
  * add woocommerce styles
  */
