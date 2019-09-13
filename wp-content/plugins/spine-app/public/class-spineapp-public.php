@@ -63,7 +63,15 @@ if ( ! class_exists( 'SpineApp_Public' ) ) { // Don't initialise if there's alre
 
                     var initApp = function() {
                         var App = require("index");
-                        exports.app = new App({el: $("body"), isProduction:<?php echo (IS_PRODUCTION) ? 'true': 'false'; ?>, isAdmin:<?php echo (current_user_can('edit_pages')) ? 'true': 'false'; ?>, smallFontSize: '0.8em', mediumFontSize: '0.9em', largeFontSize: '1.1em', defaultFontSize: 'SMALL' });
+                        exports.app = new App({
+							el: $("body"),
+							isProduction:<?php echo (IS_PRODUCTION) ? 'true': 'false'; ?>,
+							isAdmin:<?php echo (current_user_can('edit_pages')) ? 'true': 'false'; ?>,
+							smallFontSize: '0.8em',
+							mediumFontSize: '0.9em',
+							largeFontSize: '1.1em',
+							defaultFontSize: 'SMALL'
+						});
                     }
 
                     initApp();

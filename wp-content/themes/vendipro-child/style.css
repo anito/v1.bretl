@@ -866,9 +866,9 @@ body.custom-background:before {
     left: 0;
     right: 0;
     
-    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'blur\'><feGaussianBlur stdDeviation=\'80\' in=\'SourceGraphic\'></feGaussianBlur></filter></svg>#blur");
-    -webkit-filter: blur(30px) brightness(60%);
-    filter: blur(30px) brightness(60%);
+    /* filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'blur\'><feGaussianBlur stdDeviation=\'80\' in=\'SourceGraphic\'></feGaussianBlur></filter></svg>#blur"); */
+    /* -webkit-filter: blur(30px) brightness(60%); */
+    /* filter: blur(30px) brightness(60%); */
     transition: filter 1s linear;
 }
 /*
@@ -4134,8 +4134,8 @@ label.sup1 {
     position: relative;
 }
 .custom-background:before {
-    background-color: #455c7b;
-    background-image: url("/wp-content/themes/vendipro-child/gsap/assets/6-MiFuego-AlbertDros.jpg");
+    background-color: #35465d;
+    /* background-image: url("/wp-content/themes/vendipro-child/gsap/assets/6-MiFuego-AlbertDros.jpg"); */
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -4161,9 +4161,9 @@ label.sup1 {
     bottom: 0;
     left: 0;
     right: 0;
-    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'blur\'><feGaussianBlur stdDeviation=\'80\' in=\'SourceGraphic\'></feGaussianBlur></filter></svg>#blur");
-    -webkit-filter: blur(30px) brightness(60%);
-    filter: blur(30px) brightness(60%);
+    /* filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'blur\'><feGaussianBlur stdDeviation=\'80\' in=\'SourceGraphic\'></feGaussianBlur></filter></svg>#blur"); */
+    /* -webkit-filter: blur(30px) brightness(60%); */
+    /* filter: blur(30px) brightness(60%); */
     transition: filter 1s linear;
 }
 .gsap-button-group {
