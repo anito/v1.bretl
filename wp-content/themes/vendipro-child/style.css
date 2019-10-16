@@ -2528,9 +2528,6 @@ button,
     -ms-transform: translateX(0);
     transform: translateX(0);
 }
-.off-canvas.is--active {
-    /*display: block;*/
-}
 .off-canvas.is--right {
     -webkit-transform: translateX(100%);
     -moz-transform: translateX(100%);
@@ -2665,9 +2662,6 @@ h3.no-textify ~ * {
     line-height: 0 !important;
     background: transparent;
     width: 100% !important;
-}
-.textbox-wrapper .media  {
-    /*display: inherit;*/
 }
 .textbox-content-wrapper .media > img {
     width: 100%;
@@ -3264,6 +3258,14 @@ header#hmain .navbar ul li:hover > ul > li > ul {
     margin-left: 20px;
     margin-top: 0px;
 }
+.products .product .price del .amount {
+    position: absolute;
+    margin: 0 auto;
+    bottom: -13px;
+    left: 0;
+    right: 0;
+    text-decoration: line-through;
+}
 .cart-sidebar table.empty {
     display: none;
 }
@@ -3287,14 +3289,6 @@ header#hmain .navbar ul li:hover > ul > li > ul {
 .cart-sidebar .cart-collaterals .amount {
     font-size: 2em;
     float: right;
-}
-.products .product .price del .amount {
-    position: absolute;
-    margin: 0 auto;
-    bottom: -13px;
-    left: 0;
-    right: 0;
-    text-decoration: line-through;
 }
 .cart-sidebar .cart-collaterals span:first-child {
     font-size: 1em;

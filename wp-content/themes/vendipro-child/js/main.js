@@ -174,7 +174,7 @@
         
     }
 
-    var add_gsap_1 = function() {
+    var add_gsap_auto_tractor = function() {
 
         var mainTl          = new TimelineMax({repeat: -1, repeatDelay: 10, paused: false, onStart: init}),
             tractorTiltTl   = new TimelineMax({paused: true}),
@@ -393,12 +393,6 @@
             tractorTiltTl.play('start')
         }
     }
-    
-    var add_gsap_2 = function() {
-        
-//        var morph = 
-        
-    }
 
     add_fb_div();
     add_background_image();
@@ -408,8 +402,7 @@
     add_jQuery_blocking();
     add_open_links_in_new_window_icon();
     add_boxify();
-    add_gsap_1();
-//    add_gsap_2();
+    add_gsap_auto_tractor();
     // add_readmore();
     
 
