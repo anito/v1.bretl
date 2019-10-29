@@ -103,14 +103,16 @@
                 
                 }
 
-            });
+            })
 
         })
 
         $( document ).ready(function() {
-            $('.textbox-wrapper').each(function() {
+            $('.textbox-wrapper').each(function () {
+                var unblockedEl;
                 $(this).data('blockUI.static', false); // if not set to false, unblock sets position style to true
-                var x = $(this).addClass('initialized').removeClass('processing').unblock();
+                unblockedEl = $(this).addClass('initialized').removeClass('processing').unblock();
+                $(document).trigger('done.textify', unblockedEl);
             })
 //            $(include(selector, 'h3 ~ h5, h3 ~ p, h3 ~ div, h3 ~ ol, h3 ~ ul')).css({'opacity': 1, 'visibility': 'visible'});
         });

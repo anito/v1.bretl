@@ -330,16 +330,19 @@ function add_scripts() {
                     wp_enqueue_script('gsap-main-split-text');
                     break;
                 case 'draw_svg':
-                    wp_register_script('gsap-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/DrawSVGPlugin.min.js', false, '0.9.1', true);
+                    wp_register_script('gsap-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/DrawSVGPlugin.min.js', array('gsap-tween-max', 'main'), '0.9.1', true);
                     wp_enqueue_script('gsap-draw-svg');
-                    wp_register_script('gsap-main-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/custom/main.drawSVG.js', array('main'), '0.10', true);
-                    wp_enqueue_script('gsap-main-sdraw-svg');
+                    
+                    // wp_register_script('gsap-scroll-magic', get_stylesheet_directory_uri() . '/js/ScrollMagic/ScrollMagic.js', false, '2.0.5', true);
+                    // wp_enqueue_script('gsap-scroll-magic');
+                    wp_register_script('gsap-main-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/custom/main.drawSVG.js', array('gsap-draw-svg', 'jquery'), '0.10', true);
+                    wp_enqueue_script('gsap-main-draw-svg');
                     break;
                 case 'morph_svg':
                 
                     wp_register_script('gsap-morph-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/MorphSVGPlugin.min.js', false, '0.9.1', true);
                     wp_enqueue_script('gsap-morph-svg');
-                    wp_register_script('gsap-main-morph-svg', get_stylesheet_directory_uri() . '/js/gsap/custom/main.morphSVG.js', array('main'), '0.10', true);
+                    wp_register_script('gsap-main-morph-svg', get_stylesheet_directory_uri() . '/js/gsap/custom/main.morphSVG.js', array('gsap-morph-svg', 'main'), '0.10', true);
                     wp_enqueue_script('gsap-main-morph-svg');
 
                     $svg_from = "";
@@ -394,7 +397,9 @@ function add_scripts() {
      * ScrollMagic
      */
     wp_register_script('scroll-magic', get_stylesheet_directory_uri() . '/js/ScrollMagic/ScrollMagic.js', array('main'), '0.10', true);
-//    wp_enqueue_script('scroll-magic');
+    wp_enqueue_script('scroll-magic');
+    wp_register_script('gsap-scroll-magic-animation-gsap', get_stylesheet_directory_uri() . '/js/ScrollMagic/plugins/animation.gsap.js', array('scroll-magic', 'main'), '2.0.5', true);
+    wp_enqueue_script('gsap-scroll-magic-animation-gsap');
     
     /*
      * Main JS
