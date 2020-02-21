@@ -153,26 +153,6 @@
             $(this).find('.document-icon').addClass('new-window');
         })
     }
-        
-    
-    // depends on utils.js in child-theme/js
-    var add_boxify = function() {
-        
-        var excludeClasses = [
-            '.woocommerce-checkout',
-            '.woocommerce-multistep-checkout',
-            '.woocommerce-cart',
-            '.blog'
-        ],
-        
-        ignoreClasses = [
-            'page-link'
-        ]
-        
-        $('body').informify();
-        $('body').textify(excludeClasses, ignoreClasses);
-        
-    }
 
     var add_gsap_auto_tractor = function() {
 
@@ -221,7 +201,7 @@
             playOrPause();
         })
         
-        var buttonPlayTw   = new TweenMax( btnPlay, 1,
+        var buttonPlayTw   = new TweenLite( btnPlay, 1,
             {
                 scale: 1.2,
                 repeat: -1,
@@ -229,20 +209,20 @@
                 yoyo: true
             }
         )
-        var buttonPauseTw   = new TweenMax( btnPause, 1,
+        var buttonPauseTw   = new TweenLite( btnPause, 1,
             {
                 rotationZ: 360,
                 repeat: -1,
                 repeatDelay: 2,
             }
         )
-        var truckTw   = new TweenMax( truck, 0,
+        var truckTw   = new TweenLite( truck, 0,
             {
                 scaleX: 1.5,
                 transformOrigin: '100% 50%'
             }
         )
-        var bounceTw   = new TweenMax( [car, tractor], .3,
+        var bounceTw   = new TweenLite( [car, tractor], .3,
             {
                 scaleY: '+=0.1',
                 repeat: -1,
@@ -401,9 +381,7 @@
     add_image_disclaimer();
     add_jQuery_blocking();
     add_open_links_in_new_window_icon();
-    add_boxify();
     add_gsap_auto_tractor();
     // add_readmore();
-    
 
 })(jQuery)

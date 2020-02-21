@@ -1,0 +1,27 @@
+.parallax-wrapper {
+    min-height: 300px;
+    height: 30px;
+    width: 100%;
+    background: url(https://v1.bretl.webpremiere.dev/wp-content/uploads/2017/12/008_abschleppwagen.jpg) no-repeat;
+    background-position: 50% 100%;
+    background-size: cover;
+    position: relative;
+    left: 0px;
+    z-index: 0;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.parallax-bg {
+    background-color: #ffffff;
+    opacity: .7;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 100px 0;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}

@@ -1,0 +1,38 @@
+strong {
+  color:orange;
+}
+.highlight {
+  color:red;
+  font-family:serif;
+}
+.code {
+  font-family:Courier;
+}
+#demo{
+  position:relative;
+}
+#quote{
+  font-size:36px;
+  line-height:50px;
+}
+button{
+  padding:10px;
+  cursor:pointer;
+}
+#nav {
+  padding-bottom:20px;
+}
+#nav button {
+  display: inline-block;
+}
+a:visited, a:link, a:active {
+  color:#87CD02;
+  text-decoration:none;
+  display:inline-block;
+}
+a:hover {
+  background-color:#87CD02;
+}
+span {
+  display:inline-block;
+}
