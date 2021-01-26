@@ -404,7 +404,7 @@ function add_scripts() {
     /*
      * Main JS
      */
-    wp_register_script('main', get_stylesheet_directory_uri() . '/js/main.js', array('jquery'), '0.10', true);
+    wp_register_script('main', get_stylesheet_directory_uri() . '/js/main.js', array('jquery', 'gsap-timeline-max'), '0.10', true);
     wp_enqueue_script('main');
     
     /*
