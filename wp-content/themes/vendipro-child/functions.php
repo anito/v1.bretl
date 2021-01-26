@@ -294,6 +294,8 @@ function add_scripts() {
     * GSAP Libraries
     */
 
+    wp_register_script('gsap-tween-max', get_stylesheet_directory_uri() . '/js/gsap/minified/TweenMax.min.js', false, '1.20.4', true);
+    wp_enqueue_script('gsap-tween-max');
     wp_register_script('gsap-timeline-max', get_stylesheet_directory_uri() . '/js/gsap/minified/TimelineMax.min.js', false, '1.20.4', true);
     wp_enqueue_script('gsap-timeline-max');
     wp_register_script('gsap-tween-lite', get_stylesheet_directory_uri() . '/js/gsap/minified/TweenLite.min.js', false, '1.20.4', true);
@@ -334,9 +336,6 @@ function add_scripts() {
                     wp_enqueue_script('gsap-split-text');
                     break;
                 case 'draw_svg':
-                    wp_register_script('gsap-tween-max', get_stylesheet_directory_uri() . '/js/gsap/minified/TweenMax.min.js', array('main'), '1.20.4', true);
-                    wp_enqueue_script('gsap-tween-max');
-
                     wp_register_script('gsap-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/DrawSVGPlugin.min.js', array('main'), '0.9.1', true);
                     wp_enqueue_script('gsap-draw-svg');
                     
