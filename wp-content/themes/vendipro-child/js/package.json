@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bootstrap": "4.3.1",
-    "scrollmagic": "^2.0.7"
+    "scrollmagic": "^2.0.7",
+    "readmore-js": "^2.2.1"
   }
 }
