@@ -271,8 +271,8 @@ foreach (glob(WPMM_PATH . 'assets/images/backgrounds/*_thumb.jpg') as $filename)
                                     <th scope="row"><label for="options[design][creator_target]"><?php _e('Target Window', $this->plugin_slug);?></label></th>
                                     <td>
                                         <select name="options[design][creator_target]">
-                                            <option value="_blank" <?php selected($this->plugin_settings['general']['creator_target'], '_blank');?>><?php _e('New window', $this->plugin_slug);?></option>
-                                            <option value="_self" <?php selected($this->plugin_settings['general']['creator_target'], '_self');?>><?php _e('Same window', $this->plugin_slug);?></option>
+                                            <option value="_blank" <?php selected($this->plugin_settings['design']['creator_target'], '_blank');?>><?php _e('New window', $this->plugin_slug);?></option>
+                                            <option value="_self" <?php selected($this->plugin_settings['design']['creator_target'], '_self');?>><?php _e('Same window', $this->plugin_slug);?></option>
                                         </select>
                                         <p class="description"><?php _e('Choose target window', $this->plugin_slug);?></p>
                                     </td>
