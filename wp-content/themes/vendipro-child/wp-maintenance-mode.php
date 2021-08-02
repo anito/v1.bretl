@@ -96,7 +96,7 @@ false : $test?>
 <footer class="footer">
     <div class="footer__bg_copyright"><?php echo $credits; ?></div>
     <div class="footer__content">
-        <?php printf(__('%1$s is proudly powered by %2$s'), get_bloginfo('name'), get_creator(true));?>
+        <?php printf(__('%1$s is proudly powered by %2$s'), get_bloginfo('name'), $this->get_creator(true));?>
     </div>
 </footer>
 

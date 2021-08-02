@@ -856,15 +856,3 @@ function allow_svg_upload($m)
     $m['svgz'] = 'image/svg+xml';
     return $m;
 }
-
-function get_creator($use_registered = false, $target = '_blank')
-{
-    $href = 'https://webpremiere.de/';
-    $src = 'https://files.doojoo.de/f/4720e7190ac049c49089/?dl=1';
-    $alt = 'WebPremiere';
-    $output = sprintf('<a href="%1$s" target=%2$s><img class="logo" src="%3$s" alt="%4$s"></a>', $href, $target, $src, $alt);
-    if ($use_registered) {
-        $output .= '<sup>&reg;</sup>';
-    }
-    return $output;
-}
