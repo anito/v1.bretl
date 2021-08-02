@@ -1,14 +1,15 @@
 <?php
-require_once( __DIR__ . '/includes/product_category_handler.php');
-require_once( __DIR__ . '/includes/duplicate_content.php');
-require_once( __DIR__ . '/includes/sender_email.php');
+require_once __DIR__ . '/includes/product_category_handler.php';
+require_once __DIR__ . '/includes/duplicate_content.php';
+require_once __DIR__ . '/includes/sender_email.php';
 
 add_shortcode('my_sales', 'shortcode_handler_my_sales');
 add_action('init', 'fix_sales_handler_from_post', 998);
 
 $suffix = SCRIPT_DEBUG ? '' : '.min';
 
-function ret_false() {
+function ret_false()
+{
     return false;
 }
 
@@ -23,10 +24,11 @@ if (!function_exists('woocommerce_cart')) {
      * Output the Mini-cart - used by cart widget.
      *
      */
-    function woocommerce_cart($args = array()) {
+    function woocommerce_cart($args = array())
+    {
 
         $defaults = array(
-            'list_class' => ''
+            'list_class' => '',
         );
 
         $args = wp_parse_args($args, $defaults);
@@ -37,16 +39,19 @@ if (!function_exists('woocommerce_cart')) {
 }
 
 //add_action( 'woocommerce_before_account_navigation', 'action_woocommerce_before_account_navigation', 10, 0 );
-function action_woocommerce_before_account_navigation() {
+function action_woocommerce_before_account_navigation()
+{
     echo '<div class="entry-post wrapper">';
 }
 
 //add_action( 'woocommerce_after_account_navigation', 'action_woocommerce_after_account_navigation', 10, 0 );
-function action_woocommerce_after_account_navigation() {
+function action_woocommerce_after_account_navigation()
+{
     echo '</div>';
 }
 
-function new_products() {
+function new_products()
+{
     $args = array(
         'post_type' => 'product',
         'post_status' => 'publish',
@@ -54,9 +59,9 @@ function new_products() {
             array(
                 'key' => '_visibility',
                 'value' => array('catalog', 'visible'),
-                'compare' => 'IN'
-            )
-        )
+                'compare' => 'IN',
+            ),
+        ),
     );
 
     $loop = new WP_Query($args);
@@ -64,13 +69,16 @@ function new_products() {
     while ($loop->have_posts()) {
         $loop->the_post();
         global $product;
-        if (!$product->is_visible())
+        if (!$product->is_visible()) {
             continue;
+        }
+
         wc_get_template_part('content', 'product');
     }
 }
 
-function get_recent_product_ids() {
+function get_recent_product_ids()
+{
     // Load from cache
     $recent_product_ids = get_transient('recent_products');
 
@@ -81,13 +89,14 @@ function get_recent_product_ids() {
 
     $recent_products = get_recent_products();
     $recent_product_ids = wp_parse_id_list(
-            array_merge(wp_list_pluck($recent_products, 'id'), array_diff(wp_list_pluck($recent_products, 'parent_id'), array(0)))
+        array_merge(wp_list_pluck($recent_products, 'id'), array_diff(wp_list_pluck($recent_products, 'parent_id'), array(0)))
     );
 
     return $recent_product_ids;
 }
 
-function get_recent_products() {
+function get_recent_products()
+{
     global $wpdb;
 
     $date = date('Y-m-d', strtotime('-30 days'));
@@ -103,15 +112,16 @@ function get_recent_products() {
 	");
 }
 
-function product_query($q) {
+function product_query($q)
+{
 
     $product_category = get_terms('product_cat', $args)[0];
     $recent_product_ids = get_recent_product_ids();
     $product_ids_on_sale = wc_get_product_ids_on_sale();
 
-    echo("recent:<br>");
+    echo ("recent:<br>");
     var_dump((array) $recent_product_ids);
-    echo("<br>");
+    echo ("<br>");
 
     $q->set('post__in', (array) $recent_product_ids);
 }
@@ -119,14 +129,16 @@ function product_query($q) {
 /** check for sales attribute and if true add SALES Category to it */
 add_action("save_post", "on_save_post", 99, 3);
 
-function on_save_post($post_id, $post, $is_update) {
+function on_save_post($post_id, $post, $is_update)
+{
     global $woocommerce;
 
     $product_id = $post_id;
     $product = wc_get_product($product_id);
 
-    if (!$product)
+    if (!$product) {
         return 0;
+    }
 
     if ($product->is_type('variation')) {
         $variation = new WC_Product_Variation($product);
@@ -139,14 +151,16 @@ function on_save_post($post_id, $post, $is_update) {
 /** check for featured product attribute and if true add FEATURED Category to it */
 add_action("woocommerce_before_product_object_save", "before_product_object_save", 99, 2);
 
-function before_product_object_save($product, $data_store) {
+function before_product_object_save($product, $data_store)
+{
     $is_featured = $product->is_featured();
     set_product_cats($product, FEATURED_CAT_ID, $is_featured);
 }
 
 add_action('init', 'disable_wp_emojicons');
 
-function disable_wp_emojicons() {
+function disable_wp_emojicons()
+{
 
     // all actions related to emojis
     remove_action('admin_print_styles', 'print_emoji_styles');
@@ -163,12 +177,14 @@ function disable_wp_emojicons() {
 
 add_action('woocommerce_before_main_content', 'remove_vp_category_image', 0);
 
-function remove_vp_category_image() {
+function remove_vp_category_image()
+{
     remove_action('woocommerce_before_main_content', 'vp_category_image', 21);
     add_action('woocommerce_before_main_content', 'my_category_image', 21);
 }
 
-function my_category_image() {
+function my_category_image()
+{
     if (is_product_category()) {
         global $wp_query;
         $cat = $wp_query->get_queried_object();
@@ -179,21 +195,22 @@ function my_category_image() {
             if ($image) {
                 ?>
                 <div class="cat-thumb">
-                <?php if (!empty($thumbnail_post->post_title) || !empty($thumbnail_post->post_excerpt)) : ?>
+                <?php if (!empty($thumbnail_post->post_title) || !empty($thumbnail_post->post_excerpt)): ?>
                         <div class="cat-thumb-overlay">
-                    <?php echo (!empty($thumbnail_post->post_title) ? '<h3>' . $thumbnail_post->post_title . '</h3>' : '' ); ?>
-                    <?php echo (!empty($thumbnail_post->post_excerpt) ? '<i>' . $thumbnail_post->post_excerpt . '</i>' : '' ); ?>
+                    <?php echo (!empty($thumbnail_post->post_title) ? '<h3>' . $thumbnail_post->post_title . '</h3>' : ''); ?>
+                    <?php echo (!empty($thumbnail_post->post_excerpt) ? '<i>' . $thumbnail_post->post_excerpt . '</i>' : ''); ?>
                         </div>
-                <?php endif; ?>
+                <?php endif;?>
                     <img src="<?php echo $image ?>" alt="<?php echo get_post_meta($thumbnail_post->ID, '_wp_attachment_image_alt', true); ?>" />
                 </div>
                 <?php
-            }
+}
         }
     }
 }
 
-function disable_emojicons_tinymce($plugins) {
+function disable_emojicons_tinymce($plugins)
+{
     if (is_array($plugins)) {
         return array_diff($plugins, array('wpemoji'));
     } else {
@@ -203,7 +220,8 @@ function disable_emojicons_tinymce($plugins) {
 
 add_action('init', 'store_handle_query_vars', 999);
 
-function store_handle_query_vars() {
+function store_handle_query_vars()
+{
 
     $do_interrupt = false;
 
@@ -232,7 +250,8 @@ function store_handle_query_vars() {
     }
 }
 
-function store_handle_ajax_add_to_cart_failure() {
+function store_handle_ajax_add_to_cart_failure()
+{
     if (function_exists('wc_get_notices')) {
         $notices = wc_get_notices();
         if (array_key_exists('error', $notices) && isset($_REQUEST['add-to-cart'])) {
@@ -253,8 +272,9 @@ function store_handle_ajax_add_to_cart_failure() {
  */
 add_filter('woocommerce_add_to_cart_redirect', 'return_cart_redirect');
 
-function return_cart_redirect($redirect_url) {
-    if (isset($_REQUEST['ajax_cart']) && (!is_cart() )) {
+function return_cart_redirect($redirect_url)
+{
+    if (isset($_REQUEST['ajax_cart']) && (!is_cart())) {
         return '?store_action=add_to_cart_success';
     } else {
         return $redirect_url;
@@ -263,36 +283,39 @@ function return_cart_redirect($redirect_url) {
 
 add_filter('wc_add_to_cart_message', 'clear_add_to_cart_message');
 
-function clear_add_to_cart_message() {
+function clear_add_to_cart_message()
+{
     return false;
 }
 
 add_action('wp_enqueue_scripts', 'add_styles', PHP_INT_MAX);
 
-function add_styles() {
+function add_styles()
+{
     wp_enqueue_style('child-style', get_stylesheet_uri(), array('vendipro'));
 }
 
 // Function to add customer scripts to the site
 add_action('wp_enqueue_scripts', 'add_scripts', 700);
-function add_scripts() {
+function add_scripts()
+{
 
     if (IS_PRODUCTION) {
         $current_user = wp_get_current_user();
-        $user_id =  (0 == $current_user->ID) ? '' : $current_user->ID;
+        $user_id = (0 == $current_user->ID) ? '' : $current_user->ID;
         // Register analyticstracking.js file (Google Analytics)
         wp_register_script('google-analytics', get_stylesheet_directory_uri() . '/js/analyticstracking.js', false, '1.0', true);
         // Enqueue the registered script file
         wp_enqueue_script('google-analytics');
         // Register gtag.js file (Google Analytics)
-//        wp_register_script('google-analytics', get_stylesheet_directory_uri() . '/js/gtag.js', false, '1.0', true);
+        //        wp_register_script('google-analytics', get_stylesheet_directory_uri() . '/js/gtag.js', false, '1.0', true);
         // hand over the userID to the analytics script
-        wp_localize_script('google-analytics', 'atts', array('user_id' => $user_id, 'ga_id' => GA_ID ));
+        wp_localize_script('google-analytics', 'atts', array('user_id' => $user_id, 'ga_id' => GA_ID));
     }
-    
+
     /*
-    * GSAP Libraries
-    */
+     * GSAP Libraries
+     */
 
     wp_register_script('gsap-tween-max', get_stylesheet_directory_uri() . '/js/gsap/minified/TweenMax.min.js', false, '1.20.4', true);
     wp_enqueue_script('gsap-tween-max');
@@ -302,25 +325,24 @@ function add_scripts() {
     wp_enqueue_script('gsap-ease-pack');
     wp_register_script('gsap-ease-pack', get_stylesheet_directory_uri() . '/js/gsap/minified/easing/EasePack.min.js', false, '1.20.4', true);
     wp_enqueue_script('gsap-ease-pack');
-    
-    
-    if(IS_DEV_MODE) {
+
+    if (IS_DEV_MODE) {
 
         wp_register_script('gsap-css-plugin', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/CSSPlugin.min.js', false, '1.20.4', true);
         wp_enqueue_script('gsap-css-plugin');
-        
+
         /*
-        * Load GSAP Plugins/Utils/Playground on demand (custom meta tags)
-        */
+         * Load GSAP Plugins/Utils/Playground on demand (custom meta tags)
+         */
         global $post;
-        
+
         // valid gsap_types are morph_svg, draw_svg, split_text, throw_props
-        if( $gsap_types = get_post_meta($post->ID, 'gsap_type') ) {
+        if ($gsap_types = get_post_meta($post->ID, 'gsap_type')) {
 
             wp_register_script('gsap-dev-tools', get_stylesheet_directory_uri() . '/js/gsap/dev/GSDevTools.min.js', false, '0.9.1', true);
             wp_enqueue_script('gsap-dev-tools');
         }
-        foreach($gsap_types as $gsap_type) {
+        foreach ($gsap_types as $gsap_type) {
 
             switch ($gsap_type) {
                 case 'split_text':
@@ -330,10 +352,10 @@ function add_scripts() {
                 case 'draw_svg':
                     wp_register_script('gsap-draw-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/DrawSVGPlugin.min.js', array('main'), '0.9.1', true);
                     wp_enqueue_script('gsap-draw-svg');
-                    
+
                     /*
-                    * ScrollMagic
-                    */
+                     * ScrollMagic
+                     */
                     wp_register_script('scroll-magic', get_stylesheet_directory_uri() . '/node_modules/scrollmagic/scrollmagic/minified/ScrollMagic.min.js', array('gsap-tween-max', 'main'), '2.0.7', true);
                     wp_enqueue_script('scroll-magic');
                     wp_register_script('gsap-scroll-magic-indicators', get_stylesheet_directory_uri() . '/node_modules/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js', array('scroll-magic', 'main'), '2.0.5', true);
@@ -344,16 +366,16 @@ function add_scripts() {
                     // wp_enqueue_script('gsap-main-draw-svg');
                     break;
                 case 'morph_svg':
-                
+
                     wp_register_script('gsap-morph-svg', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/MorphSVGPlugin.min.js', false, '0.9.1', true);
                     wp_enqueue_script('gsap-morph-svg');
                     wp_register_script('gsap-main-morph-svg', get_stylesheet_directory_uri() . '/page_assets/js/morphSVG.js', array('gsap-morph-svg', 'main'), '0.10', true);
                     wp_enqueue_script('gsap-main-morph-svg');
 
-                    $svg_from   = get_post_meta($post->ID, 'svg_from', true);
-                    $svg_to     = get_post_meta($post->ID, 'svg_to', true);
+                    $svg_from = get_post_meta($post->ID, 'svg_from', true);
+                    $svg_to = get_post_meta($post->ID, 'svg_to', true);
 
-                    wp_localize_script('gsap-main-morph-svg', 'svg_morph_ids', array('$svg_from' => $svg_from, '$svg_to' => $svg_to ));
+                    wp_localize_script('gsap-main-morph-svg', 'svg_morph_ids', array('$svg_from' => $svg_from, '$svg_to' => $svg_to));
                     break;
                 case 'throw_props':
                     wp_register_script('gsap-throw-props', get_stylesheet_directory_uri() . '/js/gsap/minified/plugins/ThrowPropsPlugin.min.js', false, '0.9.1', true);
@@ -371,10 +393,10 @@ function add_scripts() {
     /*
      * Icons & Fonts
      */
-    wp_enqueue_style( 'child-style-fonts', get_stylesheet_directory_uri() . '/css/fonts.css' );
-	wp_enqueue_style( 'child-style-forms', get_stylesheet_directory_uri() . '/css/forms.css' );
-	wp_enqueue_style( 'child-style-animations', get_stylesheet_directory_uri() . '/css/animations.css' );
-	wp_enqueue_style( 'child-style-payments', get_stylesheet_directory_uri() . '/css/payments.css' );
+    wp_enqueue_style('child-style-fonts', get_stylesheet_directory_uri() . '/css/fonts.css');
+    wp_enqueue_style('child-style-forms', get_stylesheet_directory_uri() . '/css/forms.css');
+    wp_enqueue_style('child-style-animations', get_stylesheet_directory_uri() . '/css/animations.css');
+    wp_enqueue_style('child-style-payments', get_stylesheet_directory_uri() . '/css/payments.css');
     wp_enqueue_style('linear-icons', get_stylesheet_directory_uri() . '/css/linearicons.css');
     // wp_enqueue_style('custom-gsap', get_stylesheet_directory_uri() . '/css/gsap/style.css');
 
@@ -389,13 +411,13 @@ function add_scripts() {
 
     wp_register_script('fb', get_stylesheet_directory_uri() . '/js/fb.js', array('jquery'), '1.0', true);
     wp_enqueue_script('fb');
-    
+
     /*
      * Main JS
      */
     wp_register_script('main', get_stylesheet_directory_uri() . '/js/main.js', array('jquery', 'gsap-timeline-max'), '0.10', true);
     wp_enqueue_script('main');
-    
+
     /*
      * Sidebar Cart
      */
@@ -416,7 +438,7 @@ function add_scripts() {
      */
     wp_register_script('bootstrap', get_stylesheet_directory_uri() . '/js/node_modules/bootstrap/dist/js/bootstrap.js', array('jquery'), false, true);
     wp_enqueue_script('bootstrap');
-    
+
     /*
      * My Customized Bootstrap Vars && Bootstrap Styles Libraries
      */
@@ -428,39 +450,40 @@ function add_scripts() {
 }
 
 add_action('wp_enqueue_scripts', 'add_page_dependent_files', 800);
-function add_page_dependent_files() {
+function add_page_dependent_files()
+{
     global $post;
 
     /*
-    * Extra page css | js (values for page_css | page_js)
-    * 
-    */
+     * Extra page css | js (values for page_css | page_js)
+     *
+     */
     $page_files = array('page_css', 'page_js');
     $pattern = '/(\w+)(.*)/i';
     // $pattern = '/(pages+)(js|css)\.(js|css)/i';
 
-    foreach( $page_files as $key => $page_file ) {
+    foreach ($page_files as $key => $page_file) {
 
         write_log($key);
         $file = get_post_meta($post->ID, $page_file, true);
         $suffix = str_replace('page_', '', $page_file);
-        
+
         $file = preg_replace($pattern, '$1', $file); // sanitize
-        
-        $file = $file . '.' . $suffix; 
+
+        $file = $file . '.' . $suffix;
         write_log($file);
 
         $path = '/page_assets/' . $suffix;
-    
+
         $file_dir = get_stylesheet_directory() . $path . '/' . $file;
         $file_uri = get_stylesheet_directory_uri() . $path . '/' . $file;
-    
-        if(file_exists( $file_dir )) {
+
+        if (file_exists($file_dir)) {
             switch ($suffix) {
                 case 'css':
                     wp_enqueue_style('pages-' . $post->ID . '-' . $suffix, $file_uri);
                     break;
-                case 'js': 
+                case 'js':
                     wp_enqueue_script('pages-' . $post->ID . '-' . $suffix, $file_uri, array('main'), false, true);
                     break;
             }
@@ -474,11 +497,12 @@ function add_page_dependent_files() {
 }
 
 /*
-* Textbox Engine
-* 
-*/
+ * Textbox Engine
+ *
+ */
 add_action('wp_enqueue_scripts', 'add_textbox_engine', 999);
-function add_textbox_engine() {
+function add_textbox_engine()
+{
 
     wp_register_style('textbox', get_stylesheet_directory_uri() . '/textify/css/textbox.css');
     wp_enqueue_style('textbox');
@@ -496,7 +520,8 @@ function add_textbox_engine() {
  */
 add_filter('woocommerce_enqueue_styles', 'woocommerce_styles');
 
-function woocommerce_styles() {
+function woocommerce_styles()
+{
     return array(
         'woocommerce-layout' => array(
             'src' => plugins_url('woocommerce/assets/css/woocommerce-layout.css'),
@@ -524,14 +549,15 @@ function woocommerce_styles() {
 }
 
 // Display number of Products per page
-add_filter('loop_shop_per_page', function($cols) {
+add_filter('loop_shop_per_page', function ($cols) {
     return 8;
 }, 20);
 
 // Add specific body CSS class by filter.
 add_filter('body_class', 'body_classes');
 
-function body_classes($classes) {
+function body_classes($classes)
+{
     $classes = array_merge($classes, array('logo-active', 'vflex'));
     if (is_shop()) {
         $classes = array_merge($classes, array('shop-page'));
@@ -549,7 +575,8 @@ function body_classes($classes) {
  */
 add_filter('woocommerce_output_related_products_args', 'filter_woocommerce_output_related_products_args');
 
-function filter_woocommerce_output_related_products_args($args) {
+function filter_woocommerce_output_related_products_args($args)
+{
 
     $args['posts_per_page'] = 5;
     $args['columns'] = 5; // arranged in 5 columns
@@ -562,7 +589,8 @@ add_filter('woocommerce_is_attribute_in_product_name', function () {
 
 add_filter('woocommerce_gzdp_checkout_wrapper_classes', 'active_step_wrapper_classes');
 
-function active_step_wrapper_classes($classes) {
+function active_step_wrapper_classes($classes)
+{
 
     $ret = array_merge($classes, array('entry-post', 'wrapper'));
     return $ret;
@@ -570,17 +598,19 @@ function active_step_wrapper_classes($classes) {
 
 add_action('wp_enqueue_scripts', 'remove_styles', 30);
 
-function remove_styles() {
+function remove_styles()
+{
     wp_dequeue_style('pac-styles');
     wp_dequeue_style('pac-layout-styles');
 }
 
 add_action('woocommerce_archive_description', 'reorder_description', -1);
 
-function reorder_description() {
+function reorder_description()
+{
     if (\Perfect_Woocommerce_Brands\Perfect_Woocommerce_Brands::is_brand_archive_page()) {
         remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
-        add_action('woocommerce_archive_description', function() {
+        add_action('woocommerce_archive_description', function () {
             wc_format_content(wc_get_template('templ/brand/description_line.php'));
         }, 1);
         remove_action('woocommerce_archive_description', 'woocommerce_result_count', 0);
@@ -592,7 +622,8 @@ function reorder_description() {
 // add banner to main_content
 add_action('woocommerce_before_main_content', 'add_perfect_brand_banner');
 
-function add_perfect_brand_banner() {
+function add_perfect_brand_banner()
+{
     $instance = \Perfect_Woocommerce_Brands\Perfect_Woocommerce_Brands::this();
 
     add_action('woocommerce_before_main_content', array($instance, 'archive_page_banner'), 20);
@@ -601,7 +632,8 @@ function add_perfect_brand_banner() {
 // remove banner from shop_loop
 add_action('woocommerce_before_shop_loop', 'remove_perfect_brand_banner', 0);
 
-function remove_perfect_brand_banner() {
+function remove_perfect_brand_banner()
+{
     $instance = \Perfect_Woocommerce_Brands\Perfect_Woocommerce_Brands::this();
 
     remove_action('woocommerce_before_shop_loop', array($instance, 'archive_page_banner'), 9);
@@ -609,7 +641,8 @@ function remove_perfect_brand_banner() {
 
 add_action('woocommerce_page_title', 'pwb_page_title');
 
-function pwb_page_title($title) {
+function pwb_page_title($title)
+{
     if (\Perfect_Woocommerce_Brands\Perfect_Woocommerce_Brands::is_brand_archive_page()) {
         return $title . "";
     }
@@ -624,24 +657,26 @@ function pwb_page_title($title) {
  */
 
 //add_filter('woocommerce_related_products_args','wc_remove_related_products', 10);
-function wc_remove_related_products($args) {
+function wc_remove_related_products($args)
+{
     return array();
 }
 
 if (wp_is_mobile()) {
-    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-    if( is_plugin_active('wptouch-pro') ) {
+    include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    if (is_plugin_active('wptouch-pro')) {
         add_action('init', 'load_wptouch');
     }
 }
 
-function load_wptouch() {
+function load_wptouch()
+{
     $localize_params = array(
         'ajaxurl' => get_bloginfo('wpurl') . '/wp-admin/admin-ajax.php',
         'siteurl' => str_replace(array('http://' . $_SERVER['SERVER_NAME'] . '', 'https://' . $_SERVER['SERVER_NAME'] . ''), '', get_bloginfo('url') . '/'),
         'security_nonce' => wp_create_nonce('wptouch-ajax'),
         'current_shortcode_url' => add_query_arg(array('wptouch_shortcode' => '1'), esc_url_raw($_SERVER['REQUEST_URI'])),
-        'query_vars' => $query_vars
+        'query_vars' => $query_vars,
     );
 
     wp_enqueue_script('wptouch-front-ajax', WPTOUCH_URL . '/include/js/wptouch.min.js', array('jquery'), md5(WPTOUCH_VERSION), true);
@@ -652,7 +687,8 @@ function load_wptouch() {
 
 add_filter('dg_gallery_template', 'document_gallery_wrapper');
 
-function document_gallery_wrapper($gallery) {
+function document_gallery_wrapper($gallery)
+{
     if (is_product()) {
         return $gallery;
     } else {
@@ -662,14 +698,16 @@ function document_gallery_wrapper($gallery) {
 
 // customize Product Descrption tab
 //add_filter( 'woocommerce_product_tabs', 'woo_custom_description_tab', 98 );
-function woo_custom_description_tab($tabs) {
+function woo_custom_description_tab($tabs)
+{
 
     $tabs['description']['callback'] = 'woo_custom_description_tab_content'; // Custom description callback
 
     return $tabs;
 }
 
-function woo_custom_description_tab_content() {
+function woo_custom_description_tab_content()
+{
     echo '<h2>Custom Description</h2>';
     echo '<p>Here\'s a custom description</p>';
 }
@@ -677,7 +715,8 @@ function woo_custom_description_tab_content() {
 // set a title when initializing new products
 add_filter('default_title', 'default_product_title');
 
-function default_product_title($title) {
+function default_product_title($title)
+{
     global $post_type;
 
     switch ($post_type) {
@@ -693,7 +732,8 @@ function default_product_title($title) {
 // set a description when initializing new products
 add_filter('default_content', 'default_product_content');
 
-function default_product_content($content) {
+function default_product_content($content)
+{
     global $post_type;
 
     switch ($post_type) {
@@ -707,7 +747,8 @@ function default_product_content($content) {
 }
 
 // return attachment from postname ( filename w/o suffix )
-function get_attachment_by_post_name($post_name) {
+function get_attachment_by_post_name($post_name)
+{
     $args = array(
         'posts_per_page' => 1,
         'post_type' => 'attachment',
@@ -715,14 +756,17 @@ function get_attachment_by_post_name($post_name) {
     );
     $get_attachment = new WP_Query($args);
 
-    if ($get_attachment->posts[0])
+    if ($get_attachment->posts[0]) {
         return $get_attachment->posts[0];
-    else
+    } else {
         return false;
+    }
+
 }
 
 // add my own custom theme support (mainly for blurring of background images)
-function my_custom_background_cb() {
+function my_custom_background_cb()
+{
     // $background is the saved custom image, or the default image.
     $background = set_url_scheme(get_background_image());
 
@@ -797,16 +841,30 @@ function my_custom_background_cb() {
 }
 
 add_action('after_setup_theme', 'custom_theme_support');
-function custom_theme_support() {
+function custom_theme_support()
+{
     add_theme_support('custom-background', array(
         'default-color' => '333333',
-        'wp-head-callback' => 'my_custom_background_cb'
+        'wp-head-callback' => 'my_custom_background_cb',
     ));
 }
 
-add_filter( 'upload_mimes', 'allow_svg_upload' );
-function allow_svg_upload( $m ) {
+add_filter('upload_mimes', 'allow_svg_upload');
+function allow_svg_upload($m)
+{
     $m['svg'] = 'image/svg+xml';
     $m['svgz'] = 'image/svg+xml';
     return $m;
+}
+
+function get_creator($use_registered = false, $target = '_blank')
+{
+    $href = 'https://webpremiere.de/';
+    $src = 'https://files.doojoo.de/f/4720e7190ac049c49089/?dl=1';
+    $alt = 'WebPremiere';
+    $output = sprintf('<a href="%1$s" target=%2$s><img class="logo" src="%3$s" alt="%4$s"></a>', $href, $target, $src, $alt);
+    if ($use_registered) {
+        $output .= '<sup>&reg;</sup>';
+    }
+    return $output;
 }
