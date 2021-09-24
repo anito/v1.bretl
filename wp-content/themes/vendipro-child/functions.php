@@ -115,15 +115,15 @@ function get_recent_products()
 function product_query($q)
 {
 
-    $product_category = get_terms('product_cat', $args)[0];
+    $product_category = get_terms('product_cat')[0];
     $recent_product_ids = get_recent_product_ids();
     $product_ids_on_sale = wc_get_product_ids_on_sale();
 
     echo ("recent:<br>");
-    var_dump((array) $recent_product_ids);
+    var_dump((array)$recent_product_ids);
     echo ("<br>");
 
-    $q->set('post__in', (array) $recent_product_ids);
+    $q->set('post__in', (array)$recent_product_ids);
 }
 
 /** check for sales attribute and if true add SALES Category to it */
@@ -200,7 +200,7 @@ function my_category_image()
                     <?php echo (!empty($thumbnail_post->post_title) ? '<h3>' . $thumbnail_post->post_title . '</h3>' : ''); ?>
                     <?php echo (!empty($thumbnail_post->post_excerpt) ? '<i>' . $thumbnail_post->post_excerpt . '</i>' : ''); ?>
                         </div>
-                <?php endif;?>
+                <?php endif; ?>
                     <img src="<?php echo $image ?>" alt="<?php echo get_post_meta($thumbnail_post->ID, '_wp_attachment_image_alt', true); ?>" />
                 </div>
                 <?php
@@ -671,6 +671,12 @@ if (wp_is_mobile()) {
 
 function load_wptouch()
 {
+    if (defined('JSON_HEX_TAG')) {
+        $query_vars = json_encode($_GET, JSON_HEX_TAG);
+    } else {
+        $query_vars = json_encode($_GET);
+    }
+
     $localize_params = array(
         'ajaxurl' => get_bloginfo('wpurl') . '/wp-admin/admin-ajax.php',
         'siteurl' => str_replace(array('http://' . $_SERVER['SERVER_NAME'] . '', 'https://' . $_SERVER['SERVER_NAME'] . ''), '', get_bloginfo('url') . '/'),
