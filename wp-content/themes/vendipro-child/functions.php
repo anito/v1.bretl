@@ -862,3 +862,4 @@ function allow_svg_upload($m)
     $m['svgz'] = 'image/svg+xml';
     return $m;
 }
+/** foo */
