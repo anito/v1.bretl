@@ -863,7 +863,3 @@ function allow_svg_upload($m)
     return $m;
 }
 /** foo */
-/** foo */
-/** foo */
-/** foo */
-/** foo */
